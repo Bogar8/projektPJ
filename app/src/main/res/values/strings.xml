@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">projektPJ</string>
+    <string name="app_name">Smart mailbox</string>
+    <string name="camera_access_error">You can not scan until you give the camera permission.</string>
+    <string name="camera_access_granted">You gave the camera permission.</string>
+    <string name="scan_successful">Scan successful.</string>
+    <string name="open_mailbox">Open mailbox</string>
+    <string name="no_values_error">No values</string>
+    <string name="scan_qr">Scan QR</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pametni paketnik</string>
+    <string name="camera_access_error">"Kode ne morete skenirati, ker nimaet dovoljenj."</string>
+    <string name="camera_access_granted">Dali ste dovolenje za kamero.</string>
+    <string name="scan_successful">Skeniranje uspešno.</string>
+    <string name="open_mailbox">Odpri paketnik</string>
+    <string name="no_values_error">Ni vrednosti</string>
+    <string name="scan_qr">Skeniraj QR</string>
+</resources>
