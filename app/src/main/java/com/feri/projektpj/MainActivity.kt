@@ -84,8 +84,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun apiGetToken(mailboxId: String) {
+        var id=mailboxId.substringAfter("/").substringBefore("/")
         val request = Request.Builder()
-            .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${mailboxId}&tokenFormat=2")
+            .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${id}&tokenFormat=2")
             .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ""))
             .build();
 
