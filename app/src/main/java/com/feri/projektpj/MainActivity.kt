@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
+import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun apiGetToken(mailboxId: String) {
-        var id=mailboxId.substringAfter("/").substringBefore("/")
+        var id = mailboxId.substringAfter("/").substringBefore("/")
         val request = Request.Builder()
             .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${id}&tokenFormat=2")
             .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ""))
@@ -112,7 +113,8 @@ class MainActivity : AppCompatActivity() {
                     os.close()
                     if (zipFIle.exists())
                         unzip(zipFIle, path.toString()) //razpakiramo zip
-                    val token = File(path.toString() + "/token.wav") //pridobimo token za predvajanje
+                    val token =
+                        File(path.toString() + "/token.wav") //pridobimo token za predvajanje
                     if (token.exists()) {
                         playSound(token.path)
                         token.delete()
@@ -124,8 +126,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+
     fun playSound(path: String) {
         mMediaPlayer = MediaPlayer()
+        var count = 0
+        mMediaPlayer!!.setOnCompletionListener(object : OnCompletionListener {
+            var maxCount = 5
+            override fun onCompletion(mediaPlayer: MediaPlayer) {
+                if (count < maxCount) {
+                    count++
+                    mediaPlayer.seekTo(0)
+                    mediaPlayer.start()
+                }
+            }
+        })
+
         mMediaPlayer!!.setDataSource(path)
         mMediaPlayer!!.prepare()
         mMediaPlayer!!.start()
