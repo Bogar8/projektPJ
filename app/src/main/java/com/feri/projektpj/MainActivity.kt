@@ -27,11 +27,13 @@ class MainActivity : AppCompatActivity() {
     val MY_INTERNET_PERMISSION_REQUEST = 112
     private val client = OkHttpClient()
     private var apiPackage: String? = ""
+    private var app: ApplicationMy? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkPermission()
+        app = application as ApplicationMy
     }
 
     private fun checkPermission() {
