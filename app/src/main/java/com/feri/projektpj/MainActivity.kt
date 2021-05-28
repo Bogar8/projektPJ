@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,12 +29,16 @@ class MainActivity : AppCompatActivity() {
     private val client = OkHttpClient()
     private var apiPackage: String? = ""
     private var app: ApplicationMy? = null
+    private var etUsername: EditText? = null
+    private var etPassword: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkPermission()
         app = application as ApplicationMy
+        etUsername = findViewById(R.id.editTextTextPersonName)
+        etPassword = findViewById(R.id.editTextTextPassword)
     }
 
     private fun checkPermission() {
@@ -58,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == MY_INTERNET_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this, getString(R.string.internet_access_granted), Toast.LENGTH_LONG)
                 .show()
-        //codeScanner.startPreview()
         else
             Toast.makeText(this, getString(R.string.internet_access_error), Toast.LENGTH_LONG)
                 .show()
@@ -181,4 +185,83 @@ class MainActivity : AppCompatActivity() {
         }
         bos.close()
     }
+
+
+    fun loginClick(view: View) {
+        val username = etUsername?.text.toString()
+        val password = etPassword?.text.toString()
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            val formBody = FormBody.Builder()
+                .add("username", username)
+                .add("password", password)
+                .build()
+            val request: Request = Request.Builder()
+                .url("http://10.0.2.2:3000/users/api/login")
+                .post(formBody)
+                .build()
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, ex: IOException) {
+                    Log.i(TAG, ex.message.toString())
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        apiPackage = it.body()?.string()
+                        val jsonObject = JSONObject(apiPackage)
+                        if (jsonObject.getBoolean("successful")) {
+                            app?.setUserId(jsonObject.get("userId").toString())
+                            app?.setUsername(jsonObject.get("username").toString())
+                            app?.setUserEmail(jsonObject.get("email").toString())
+                            Log.i(
+                                TAG,
+                                "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}"
+                            )
+                            val bodyMailboxes = FormBody.Builder()
+                                .add("userId", app?.getUserId().toString())
+                                .build()
+                            val requestMailboxes: Request = Request.Builder()
+                                .url("http://10.0.2.2:3000/mailbox/api/myMailboxes")
+                                .post(bodyMailboxes)
+                                .build()
+                            client.newCall(requestMailboxes).enqueue(object : Callback {
+                                override fun onFailure(call: Call, ex: IOException) {
+                                    Log.i(TAG, ex.message.toString())
+                                }
+                                override fun onResponse(call: Call, response: Response) {
+                                    response.use {
+                                        apiPackage = it.body()?.string()
+                                        val jsonObject = JSONObject(apiPackage)
+                                        val mailboxes = jsonObject.getJSONArray("mailboxes")
+                                        for (i in 0 until mailboxes.length()) {
+                                            app?.addMailbox(
+                                                mailboxes.getJSONObject(i).get("code").toString()
+                                            )
+                                            Log.i(
+                                                TAG,
+                                                mailboxes.getJSONObject(i).get("code").toString()
+                                            )
+                                        }
+                                    }
+                                    // val intent = Intent(this@MainActivity, ScanActivity::class.java)
+                                    //  startActivity(intent)
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+        } else {
+            makeToast("Fill all boxes")
+        }
+    }
+
+    private fun makeToast(message: String) {
+        Toast.makeText(
+            baseContext,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
 }
