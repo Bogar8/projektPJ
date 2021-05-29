@@ -149,9 +149,8 @@ class MainActivity : AppCompatActivity() {
                                             )
                                         }
                                     }
-                                    // val intent = Intent(this@MainActivity, ScanActivity::class.java)
-                                    //  startActivity(intent)
-
+                                     val intent = Intent(this@MainActivity, MenuActivity::class.java)
+                                      startActivity(intent)
                                 }
                             })
                         }
@@ -334,8 +333,8 @@ class MainActivity : AppCompatActivity() {
                                                 )
                                             }
                                         }
-                                        // val intent = Intent(this@MainActivity, ScanActivity::class.java)
-                                        //  startActivity(intent)
+                                         val intent = Intent(this@MainActivity, MenuActivity::class.java)
+                                          startActivity(intent)
                                     }
                                 })
                         }
