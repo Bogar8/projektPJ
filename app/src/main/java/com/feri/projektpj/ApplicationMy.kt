@@ -3,7 +3,6 @@ package com.feri.projektpj
 import android.app.Application
 
 class ApplicationMy : Application() {
-
     companion object {
         private var userID: String? = null
         private var username: String? = null
