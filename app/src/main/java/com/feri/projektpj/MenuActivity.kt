@@ -12,9 +12,10 @@ import android.view.View
 import android.widget.Toast
 import okhttp3.*
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import java.io.IOException
+import java.io.*
 import java.util.concurrent.TimeUnit
+import java.util.zip.ZipFile
+import kotlin.jvm.Throws
 
 
 class MenuActivity : AppCompatActivity() {
@@ -22,6 +23,8 @@ class MenuActivity : AppCompatActivity() {
     val CAMERA_REQUEST = 1001
     private var apiPackage: String? = ""
     private var app: ApplicationMy? = null
+    var mMediaPlayer: MediaPlayer? = null
+    private val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +37,26 @@ class MenuActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 
+    fun openScanCodeActivityForResult(view: View) {
+        val intent = Intent(this@MenuActivity, ScanActivity::class.java)
+        startActivityForResult(intent, ScanActivity().ACTIVITY_ID)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ScanActivity().ACTIVITY_ID) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    var mailboxId = data.extras!![ScanActivity().MAILBOX_ID].toString()
+                    Toast.makeText(this, getString(R.string.scan_successful), Toast.LENGTH_LONG)
+                        .show()
+                    apiGetToken(mailboxId)
+                } else {
+                    Toast.makeText(this, getString(R.string.no_values_error), Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        } else
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             val photo = data?.extras?.get("data") as Bitmap
             val stream = ByteArrayOutputStream()
@@ -66,5 +87,115 @@ class MenuActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    fun apiGetToken(mailboxId: String) {
+        var id = mailboxId.substringAfter("/").substringBefore("/")
+        val request = Request.Builder()
+            .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${id}&tokenFormat=2")
+            .post(
+                RequestBody.create(
+                    MediaType.parse("application/json; charset=utf-8"),
+                    ""
+                )
+            )
+            .build();
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, ex: IOException) {
+                Log.i(TAG, ex.message.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    apiPackage = it.body()?.string()
+                    val jsonObject = JSONObject(apiPackage)
+                    val data = jsonObject.get("Data") //pridobimo string iz odgovora
+                    val decodedBytes = Base64.decode(
+                        data.toString(),
+                        Base64.DEFAULT
+                    ) //dekodiramo string da dobimo zip
+                    val path = filesDir //pot do mape z datotekami
+                    val zipFIle = File.createTempFile(
+                        "unlockSound",
+                        ".zip",
+                        path
+                    ) //shranimo zip
+                    val os = FileOutputStream(zipFIle)
+                    os.write(decodedBytes)
+                    os.close()
+                    if (zipFIle.exists())
+                        unzip(zipFIle, path.toString()) //razpakiramo zip
+                    val token =
+                        File(path.toString() + "/token.wav") //pridobimo token za predvajanje
+                    if (token.exists()) {
+                        playSound(token.path)
+                        token.delete()
+                    }
+                    if (zipFIle.exists())
+                        zipFIle.delete()
+                }
+            }
+        })
+    }
+
+
+    fun playSound(path: String) {
+        mMediaPlayer = MediaPlayer()
+        var count = 0
+        mMediaPlayer!!.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
+            var maxCount = 5
+            override fun onCompletion(mediaPlayer: MediaPlayer) {
+                if (count < maxCount) {
+                    count++
+                    mediaPlayer.seekTo(0)
+                    mediaPlayer.start()
+                }
+            }
+        })
+
+        mMediaPlayer!!.setDataSource(path)
+        mMediaPlayer!!.prepare()
+        mMediaPlayer!!.start()
+    }
+
+
+    fun unzip(zipFilePath: File, destDirectory: String) {
+        val destDir = File(destDirectory)
+        if (!destDir.exists()) {
+            destDir.mkdir()
+        }
+        ZipFile(zipFilePath).use { zip ->
+            zip.entries().asSequence().forEach { entry ->
+                zip.getInputStream(entry).use { input ->
+                    val filePath = destDirectory + File.separator + entry.name
+                    if (!entry.isDirectory) {
+                        // if the entry is a file, extracts it
+                        extractFile(input, filePath)
+                    } else {
+                        // if the entry is a directory, make the directory
+                        val dir = File(filePath)
+                        dir.mkdir()
+                    }
+                }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun extractFile(inputStream: InputStream, destFilePath: String) {
+        val bos = BufferedOutputStream(FileOutputStream(destFilePath))
+        val bytesIn = ByteArray(4096)
+        var read: Int
+        while (inputStream.read(bytesIn).also { read = it } != -1) {
+            bos.write(bytesIn, 0, read)
+        }
+        bos.close()
+    }
+
+    fun openMyMailboxes(view: View) {
+        val intent = Intent(this@MenuActivity, MyMailboxesActivity::class.java)
+        startActivityForResult(intent, MyMailboxesActivity().ACTIVITY_ID)
     }
 }

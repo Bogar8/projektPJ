@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.feri.projektpj">
+    package="com.feri.projektpj" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,10 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjektPJ"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".MyMailboxesActivity"></activity>
+        android:usesCleartextTraffic="true" >
+        <activity android:name=".LoginWithUsernameActivity" >
+        </activity>
+        <activity android:name=".MyMailboxesActivity" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
