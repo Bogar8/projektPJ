@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.data.Mailbox
 import okhttp3.*
 import org.json.JSONObject
 import java.io.*
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_INTERNET_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this, getString(R.string.internet_access_granted), Toast.LENGTH_LONG)
                 .show()
@@ -140,9 +142,10 @@ class MainActivity : AppCompatActivity() {
                                         val jsonObject = JSONObject(apiPackage)
                                         val mailboxes = jsonObject.getJSONArray("mailboxes")
                                         for (i in 0 until mailboxes.length()) {
-                                            app?.addMailbox(
+                                            app?.addMailbox(Mailbox(
+                                                mailboxes.getJSONObject(i).get("location").toString(),
                                                 mailboxes.getJSONObject(i).get("code").toString()
-                                            )
+                                            ))
                                             Log.i(
                                                 TAG,
                                                 mailboxes.getJSONObject(i).get("code").toString()
@@ -322,9 +325,10 @@ class MainActivity : AppCompatActivity() {
                                             val mailboxes =
                                                 jsonObject.getJSONArray("mailboxes")
                                             for (i in 0 until mailboxes.length()) {
-                                                app?.addMailbox(
+                                                app?.addMailbox(Mailbox(
                                                     mailboxes.getJSONObject(i)
-                                                        .get("code").toString()
+                                                        .get("location").toString(),mailboxes.getJSONObject(i)
+                                                        .get("code").toString())
                                                 )
                                                 Log.i(
                                                     TAG,

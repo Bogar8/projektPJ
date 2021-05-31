@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">25sp</dimen>
+    <dimen name="title_text_size">30sp</dimen>
+    <dimen name="image_margin">10sp</dimen>
+    <dimen name="margin_5">5sp</dimen>
+    <dimen name="margin_10">10sp</dimen>
+    <dimen name="margin_20">20sp</dimen>
+    <dimen name="margin_25">25sp</dimen>
+    <dimen name="margin_55">55sp</dimen>
+    <dimen name="margin_0">0sp</dimen>
+    <dimen name="calender_size">0sp</dimen>
+    <dimen name="hgl_01">0.1</dimen>
+    <dimen name="hgl_05">0.5</dimen>
+    <dimen name="hgl_07">0.7</dimen>
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="btn_margin">20sp</dimen>
+    <dimen name="btn_padding">10dp</dimen>
+    <dimen name="et_padding">10dp</dimen>
+    <item name="centerX" type="dimen" format="float">-0.5</item>
+</resources>

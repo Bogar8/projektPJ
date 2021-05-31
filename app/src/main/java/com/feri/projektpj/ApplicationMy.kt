@@ -1,45 +1,54 @@
 package com.feri.projektpj
 
 import android.app.Application
+import com.example.data.Mailbox
 
 class ApplicationMy : Application() {
     companion object {
         private var userID: String? = null
         private var username: String? = null
         private var userEmail: String? = null
-        private var userMailboxes: ArrayList<String> = ArrayList()
+        private var userMailboxes: ArrayList<Mailbox> = ArrayList()
     }
 
-    public fun getUserId(): String? {
+    fun getUserId(): String? {
         return userID
     }
 
-    public fun setUserId(id: String) {
+    fun setUserId(id: String) {
         userID = id
     }
 
-    public fun getUsername(): String? {
+    fun getUsername(): String? {
         return username
     }
 
-    public fun setUsername(name: String) {
+    fun setUsername(name: String) {
         username = name
     }
 
-    public fun getUserEmail(): String? {
+    fun getUserEmail(): String? {
         return userEmail
     }
 
-    public fun setUserEmail(mail: String) {
+    fun setUserEmail(mail: String) {
         userEmail = mail
     }
 
-    public fun addMailbox(koda: String) {
-        userMailboxes.add(koda)
+    fun addMailbox(mailbox: Mailbox) {
+        userMailboxes.add(mailbox)
     }
 
-    public fun getMailboxes() : ArrayList<String>{
+    fun getMailboxes() : ArrayList<Mailbox>{
         return userMailboxes
+    }
+
+    fun getMailboxAtPosition(position: Int):Mailbox{
+        return userMailboxes.get(position)
+    }
+
+    fun getMailboxesCount(): Int{
+        return userMailboxes.size
     }
 
     override fun onCreate() {
