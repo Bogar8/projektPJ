@@ -3,6 +3,7 @@ package com.feri.projektpj
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -10,11 +11,14 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.data.Mailbox
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddAccessActivity : AppCompatActivity() {
@@ -22,6 +26,8 @@ class AddAccessActivity : AppCompatActivity() {
     val ACTIVITY_ID = 104
     val MAILBOX_CODE = "MAILBOX_CODE"
     var mailboxCode: String? = null
+    private var app: ApplicationMy? = null
+
     private var apiPackage: String? = ""
     private var etUsername: EditText? = null
     private var tvDateFrom: TextView? = null
@@ -41,6 +47,7 @@ class AddAccessActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        app = ApplicationMy()
         setContentView(R.layout.activity_add_access)
         etUsername = findViewById(R.id.etUsername)
         tvDateFrom = findViewById(R.id.tvDateFrom)
@@ -64,7 +71,7 @@ class AddAccessActivity : AppCompatActivity() {
             yearFrom = c[Calendar.YEAR]
             monthFrom = c[Calendar.MONTH]
             dayFrom = c[Calendar.DAY_OF_MONTH]
-            var tvDateFrom: TextView = findViewById(R.id.tvDateTo)
+            var tvDateFrom: TextView = findViewById(R.id.tvDateFrom)
             val datePickerDialog = DatePickerDialog(this,
                 { view, year, monthOfYear, dayOfMonth -> tvDateFrom.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
                 yearFrom,
@@ -75,9 +82,9 @@ class AddAccessActivity : AppCompatActivity() {
         }
         if (v === tvDateTo) {
             val c = Calendar.getInstance()
-            yearFrom = c[Calendar.YEAR]
-            monthFrom = c[Calendar.MONTH]
-            dayFrom = c[Calendar.DAY_OF_MONTH]
+            yearTo = c[Calendar.YEAR]
+            monthTo = c[Calendar.MONTH]
+            dayTo = c[Calendar.DAY_OF_MONTH]
             var tvDateTo: TextView = findViewById(R.id.tvDateTo)
             val datePickerDialog = DatePickerDialog(this,
                 { view, year, monthOfYear, dayOfMonth -> tvDateTo.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
@@ -104,8 +111,8 @@ class AddAccessActivity : AppCompatActivity() {
         }
         if (v === tvTimeTo) {
             val c = Calendar.getInstance()
-            hourFrom = c[Calendar.HOUR_OF_DAY]
-            minuteFrom = c[Calendar.MINUTE]
+            hourTo = c[Calendar.HOUR_OF_DAY]
+            minuteTo = c[Calendar.MINUTE]
             var tvTimeTo: TextView = findViewById(R.id.tvTimeTo)
             // Launch Time Picker Dialog
             val timePickerDialog = TimePickerDialog(this,
@@ -118,6 +125,7 @@ class AddAccessActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onClickAddAccess(view: View){
         try {
             if (TextUtils.isEmpty(etUsername?.getText())) {
@@ -155,7 +163,7 @@ class AddAccessActivity : AppCompatActivity() {
             calendarTo.set(Calendar.MINUTE, minuteTo)
             calendarTo.set(Calendar.HOUR_OF_DAY, hourTo)
 
-            addAccess(mailboxCode, calendarFrom.time.toString(), calendarTo.time.toString(), etUsername?.text.toString())
+            addAccess(mailboxCode, calendarFrom.toString(), calendarTo.toString(), etUsername?.text.toString())
             etUsername?.setText("")
             tvDateFrom?.setText(R.string.date_from)
             tvDateTo?.setText(R.string.date_to)
@@ -169,6 +177,7 @@ class AddAccessActivity : AppCompatActivity() {
 
     fun addAccess(code: String?, dateFrom: String, dateTo: String, username: String) {
         val formBody = FormBody.Builder()
+            .add("user_id", app?.getUserId())
             .add("username", username)
             .add("mailbox_code", code)
             .add("date_from", dateFrom)
@@ -196,4 +205,8 @@ class AddAccessActivity : AppCompatActivity() {
         })
 
     }
+}
+
+private fun Date.format(isoLocalDate: DateTimeFormatter?) {
+
 }
