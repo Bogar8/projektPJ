@@ -41,6 +41,7 @@ class MailboxAdapter  (
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tvMailboxLocation = itemView.findViewById<TextView>(R.id.tvMailboxLocation)
         val tvMailboxStatus = itemView.findViewById<TextView>(R.id.tvMailboxStatus)
+        val background = itemView.findViewById<View>(R.id.rvMailbox)
 
         fun bind(workDay: Mailbox?, action: OnItemClickListener){
             tvMailboxLocation.setText(workDay?.location)

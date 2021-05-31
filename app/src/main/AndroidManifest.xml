@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjektPJ"
         android:usesCleartextTraffic="true" >
-        <activity android:name=".LoginWithUsernameActivity" >
-        </activity>
+        <activity android:name=".LoginWithUsernameActivity" ></activity>
+        <activity android:name=".AddAccessActivity"></activity>
         <activity android:name=".MyMailboxesActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MainActivity" >

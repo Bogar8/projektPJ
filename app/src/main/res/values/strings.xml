@@ -9,4 +9,12 @@
     <string name="no_values_error">No values</string>
     <string name="scan_qr">Scan QR</string>
     <string name="back">back</string>
+    <string name="empty">this field can not be empty</string>
+    <string name="add_access">Add access</string>
+    <string name="add">add</string>
+    <string name="username">username</string>
+    <string name="date_from">Date From</string>
+    <string name="date_to">Date To</string>
+    <string name="time_to">Time to</string>
+    <string name="time_from">Time from</string>
 </resources>

@@ -10,4 +10,12 @@
     <string name="no_values_error">Ni vrednosti</string>
     <string name="scan_qr">Skeniraj QR</string>
     <string name="back">Nazaj</string>
+    <string name="empty">To polje ne sme biti prazno</string>
+    <string name="add_access">Dodaj dostop</string>
+    <string name="add">Dodaj</string>
+    <string name="username">Uporabniško ime</string>
+    <string name="date_from">Datum od</string>
+    <string name="date_to">Datum do</string>
+    <string name="time_to">Čas do</string>
+    <string name="time_from">Čas od</string>
 </resources>
