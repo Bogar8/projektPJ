@@ -10,13 +10,14 @@
         android:id="@+id/btnLoginWithCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:onClick="loginCamera"
         android:text="@string/login_with_camera"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toTopOf="@+id/btnLoginWithUsernameAndPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivBox"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
@@ -27,10 +28,28 @@
         android:onClick="loginWithUsernameAndPassword"
         android:text="@string/login"
         android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLoginWithCamera" />
+
+    <ImageView
+        android:id="@+id/ivBox"
+        android:layout_width="269dp"
+        android:layout_height="223dp"
+        android:layout_marginBottom="@dimen/margin_25"
+        app:layout_constraintBottom_toTopOf="@+id/btnLoginWithCamera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/hglMain"
+        app:srcCompat="@drawable/ic_box" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/hglMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

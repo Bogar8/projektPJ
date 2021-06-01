@@ -7,7 +7,7 @@
     tools:context=".AddAccessActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hglInsertWorkOrderActivity"
+        android:id="@+id/hglMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -40,7 +40,7 @@
         android:textSize="@dimen/text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hglInsertWorkOrderActivity" />
+        app:layout_constraintTop_toTopOf="@+id/hglMain" />
 
     <TextView
         android:id="@+id/textView"
@@ -50,7 +50,7 @@
         android:text="@string/add_access"
         android:textColor="@color/black"
         android:textSize="@dimen/title_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/hglInsertWorkOrderActivity"
+        app:layout_constraintBottom_toTopOf="@+id/hglMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
