@@ -24,8 +24,8 @@ class LoginWithUsernameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_with_username)
-        etUsername = findViewById(R.id.editTextTextPersonName)
-        etPassword = findViewById(R.id.editTextTextPassword)
+        etUsername = findViewById(R.id.etPersonName)
+        etPassword = findViewById(R.id.etPassword)
         app = application as ApplicationMy
     }
 

@@ -10,9 +10,11 @@
         android:id="@+id/btnAddPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/margin_25"
         android:onClick="addPictureClick"
-        android:text="Add picture for face recognition"
+        android:text="@string/add_picture_for_login"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnMyMailboxes" />
@@ -23,19 +25,23 @@
         android:layout_height="wrap_content"
         android:onClick="openScanCodeActivityForResult"
         android:text="@string/open_mailbox"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/text_size"
+        android:layout_marginTop="@dimen/margin_25"
+        app:layout_constraintBottom_toTopOf="@+id/btnMyMailboxes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/btnMyMailboxes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:onClick="openMyMailboxes"
-        android:text="my mailboxes"
+        android:text="@string/my_mailboxes"
+        android:textSize="@dimen/text_size"
+        android:layout_marginTop="@dimen/margin_25"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddPicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnScanCode" />

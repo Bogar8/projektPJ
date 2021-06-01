@@ -19,11 +19,13 @@
         android:id="@+id/btnQRScanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="@dimen/margin_25"
         android:onClick="finishActivity"
+        android:textSize="@dimen/margin_25"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scannView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

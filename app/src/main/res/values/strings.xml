@@ -19,4 +19,8 @@
     <string name="time_from">Time from</string>
     <string name="password">Password</string>
     <string name="name">Name</string>
+    <string name="login_with_camera">login with camera</string>
+    <string name="login">login</string>
+    <string name="add_picture_for_login">Add picture for login</string>
+    <string name="my_mailboxes">my mailboxes</string>
 </resources>
