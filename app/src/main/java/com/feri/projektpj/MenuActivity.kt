@@ -10,6 +10,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.data.Mailbox
 import okhttp3.*
 import org.json.JSONObject
 import java.io.*
@@ -48,51 +49,79 @@ class MenuActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     var mailboxId = data.extras!![ScanActivity().MAILBOX_ID].toString()
+                    mailboxId = mailboxId.substringAfter("/").substringBefore("/")
                     Toast.makeText(this, getString(R.string.scan_successful), Toast.LENGTH_LONG)
                         .show()
-                    apiGetToken(mailboxId)
+
+                    val formBody = FormBody.Builder()
+                        .add("user_id", app?.getUserId().toString())
+                        .add("mailbox_code", mailboxId)
+                        .build()
+                    val request: Request = Request.Builder()
+                        .url("http://10.0.2.2:3000/packageaccess/api/access")
+                        .post(formBody)
+                        .build()
+                    val client = OkHttpClient()
+                    client.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, ex: IOException) {
+                            Log.i(TAG, ex.message.toString())
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            response.use {
+                                apiPackage = it.body()?.string()
+                                val jsonObject = JSONObject(apiPackage)
+                                if (jsonObject.getBoolean("successful")) {
+                                    apiGetToken(mailboxId)
+                                    Log.i(
+                                        TAG,
+                                        "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}"
+                                    )
+                                }
+                            }
+                        }
+                    })
                 } else {
                     Toast.makeText(this, getString(R.string.no_values_error), Toast.LENGTH_LONG)
                         .show()
                 }
             }
         } else
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            val photo = data?.extras?.get("data") as Bitmap
-            val stream = ByteArrayOutputStream()
-            photo.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            val encodedImage = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
-            val formBody = FormBody.Builder()
-                .add("photo", encodedImage)
-                .add("user_id", app?.getUserId().toString())
-                .build()
-            val request: Request = Request.Builder()
-                .url("http://10.0.2.2:3000/face/api/add")
-                .post(formBody)
-                .build()
-            val client = OkHttpClient().newBuilder().connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build()
+            if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+                val photo = data?.extras?.get("data") as Bitmap
+                val stream = ByteArrayOutputStream()
+                photo.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                val encodedImage = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
+                val formBody = FormBody.Builder()
+                    .add("photo", encodedImage)
+                    .add("user_id", app?.getUserId().toString())
+                    .build()
+                val request: Request = Request.Builder()
+                    .url("http://10.0.2.2:3000/face/api/add")
+                    .post(formBody)
+                    .build()
+                val client = OkHttpClient().newBuilder().connectTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build()
 
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, ex: IOException) {
-                    Log.i(TAG, ex.message.toString())
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    response.use {
-                        apiPackage = it.body()?.string()
-                        val jsonObject = JSONObject(apiPackage)
-                        Log.i(TAG, jsonObject.get("message").toString())
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, ex: IOException) {
+                        Log.i(TAG, ex.message.toString())
                     }
-                }
-            })
-        }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        response.use {
+                            apiPackage = it.body()?.string()
+                            val jsonObject = JSONObject(apiPackage)
+                            Log.i(TAG, jsonObject.get("message").toString())
+                        }
+                    }
+                })
+            }
     }
 
     fun apiGetToken(mailboxId: String) {
-        var id = mailboxId.substringAfter("/").substringBefore("/")
         val request = Request.Builder()
-            .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${id}&tokenFormat=2")
+            .url("https://api-test.direct4.me/Sandbox/PublicAccess/V1/api/access/OpenBox?boxID=${mailboxId}&tokenFormat=2")
             .post(
                 RequestBody.create(
                     MediaType.parse("application/json; charset=utf-8"),
