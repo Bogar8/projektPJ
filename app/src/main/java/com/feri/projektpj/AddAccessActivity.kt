@@ -179,7 +179,7 @@ class AddAccessActivity : AppCompatActivity() {
             val tz = TimeZone.getTimeZone("UTC")
             val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'") // Quoted "Z" to indicate UTC, no timezone offset
             df.setTimeZone(tz)
-            addAccess(mailboxCode, df.format(Date(yearFrom-1900, monthFrom, dayFrom, hourFrom, minuteFrom)), df.format(Date(yearTo-1900, monthTo, dayTo, hourTo, minuteTo)), etUsername?.text.toString())
+            addAccess(mailboxCode, df.format(Date(yearFrom-1900, monthFrom, dayFrom, hourFrom - 2, minuteFrom)), df.format(Date(yearTo-1900, monthTo, dayTo, hourTo - 2, minuteTo)), etUsername?.text.toString())
             etUsername?.setText("")
             tvDateFrom?.setText(R.string.date_from)
             tvDateTo?.setText(R.string.date_to)
