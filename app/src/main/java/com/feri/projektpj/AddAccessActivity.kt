@@ -1,23 +1,26 @@
 package com.feri.projektpj
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.data.Mailbox
+import androidx.fragment.app.DialogFragment
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
-import java.time.LocalDate
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -72,8 +75,14 @@ class AddAccessActivity : AppCompatActivity() {
             monthFrom = c[Calendar.MONTH]
             dayFrom = c[Calendar.DAY_OF_MONTH]
             var tvDateFrom: TextView = findViewById(R.id.tvDateFrom)
+            val dateSetListener = DatePickerDialog.OnDateSetListener{ timePicker, year, monthOfYear, dayOfMonth ->
+                yearFrom = year
+                monthFrom = monthOfYear
+                dayFrom = dayOfMonth
+                tvDateFrom.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year)
+            }
             val datePickerDialog = DatePickerDialog(this,
-                { view, year, monthOfYear, dayOfMonth -> tvDateFrom.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
+                dateSetListener,
                 yearFrom,
                 monthFrom,
                 dayFrom
@@ -86,8 +95,14 @@ class AddAccessActivity : AppCompatActivity() {
             monthTo = c[Calendar.MONTH]
             dayTo = c[Calendar.DAY_OF_MONTH]
             var tvDateTo: TextView = findViewById(R.id.tvDateTo)
+            val dateSetListener = DatePickerDialog.OnDateSetListener{ timePicker, year, monthOfYear, dayOfMonth ->
+                yearTo = year
+                monthTo = monthOfYear
+                dayTo = dayOfMonth
+                tvDateTo.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year)
+            }
             val datePickerDialog = DatePickerDialog(this,
-                { view, year, monthOfYear, dayOfMonth -> tvDateTo.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
+                dateSetListener,
                 yearTo,
                 monthTo,
                 dayTo
@@ -100,9 +115,15 @@ class AddAccessActivity : AppCompatActivity() {
             hourFrom = c[Calendar.HOUR_OF_DAY]
             minuteFrom = c[Calendar.MINUTE]
             var tvTimeFrom: TextView = findViewById(R.id.tvTimeFrom)
+
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                hourFrom = hour
+                minuteFrom = minute
+                tvTimeFrom.setText(hour.toString() + ":" + minute)
+            }
             // Launch Time Picker Dialog
             val timePickerDialog = TimePickerDialog(this,
-                { view, hourOfDay, minute -> tvTimeFrom.setText(hourOfDay.toString() + ":" + minute) },
+                timeSetListener,
                 hourFrom,
                 minuteFrom,
                 true
@@ -115,14 +136,20 @@ class AddAccessActivity : AppCompatActivity() {
             minuteTo = c[Calendar.MINUTE]
             var tvTimeTo: TextView = findViewById(R.id.tvTimeTo)
             // Launch Time Picker Dialog
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                hourTo = hour
+                minuteTo = minute
+                tvTimeTo.setText(hour.toString() + ":" + minute)
+            }
             val timePickerDialog = TimePickerDialog(this,
-                { view, hourOfDay, minute -> tvTimeTo.setText(hourOfDay.toString() + ":" + minute) },
+                timeSetListener,
                 hourTo,
                 minuteTo,
                 true
             )
             timePickerDialog.show()
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -148,22 +175,11 @@ class AddAccessActivity : AppCompatActivity() {
                 tvTimeTo?.setError(getString(R.string.empty))
                 return
             }
-            val calendarFrom = Calendar.getInstance()
-            val calendarTo = Calendar.getInstance()
 
-            calendarFrom.set(Calendar.YEAR, yearFrom)
-            calendarFrom.set(Calendar.MONTH, monthFrom)
-            calendarFrom.set(Calendar.DAY_OF_MONTH, dayFrom)
-            calendarFrom.set(Calendar.MINUTE, minuteFrom)
-            calendarFrom.set(Calendar.HOUR_OF_DAY, hourFrom)
-
-            calendarTo.set(Calendar.YEAR, yearTo)
-            calendarTo.set(Calendar.MONTH, monthTo)
-            calendarTo.set(Calendar.DAY_OF_MONTH, dayTo)
-            calendarTo.set(Calendar.MINUTE, minuteTo)
-            calendarTo.set(Calendar.HOUR_OF_DAY, hourTo)
-
-            addAccess(mailboxCode, calendarFrom.toString(), calendarTo.toString(), etUsername?.text.toString())
+            val tz = TimeZone.getTimeZone("UTC")
+            val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'") // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz)
+            addAccess(mailboxCode, df.format(Date(yearFrom-1900, monthFrom, dayFrom, hourFrom, minuteFrom)), df.format(Date(yearTo-1900, monthTo, dayTo, hourTo, minuteTo)), etUsername?.text.toString())
             etUsername?.setText("")
             tvDateFrom?.setText(R.string.date_from)
             tvDateTo?.setText(R.string.date_to)

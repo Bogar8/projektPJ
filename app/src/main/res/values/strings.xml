@@ -17,4 +17,6 @@
     <string name="date_to">Date To</string>
     <string name="time_to">Time to</string>
     <string name="time_from">Time from</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
 </resources>

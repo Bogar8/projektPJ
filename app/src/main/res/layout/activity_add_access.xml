@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_10"
         android:hint="@string/username"
-        android:inputType="text"
+        android:inputType="datetime"
         android:padding="@dimen/et_padding"
         android:textAlignment="center"
         android:textColor="@color/black"
