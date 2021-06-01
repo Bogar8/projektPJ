@@ -38,6 +38,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         checkPermission()
         app = application as ApplicationMy
+        if (app?.getLogin() == true)
+            finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = Intent(this@MainActivity, MenuActivity::class.java)
+        if (app?.getLogin() == true)
+            startActivity(intent)
     }
 
     private fun checkPermission() {
@@ -97,6 +106,7 @@ class MainActivity : AppCompatActivity() {
                             app?.setUserId(jsonObject.get("user_id").toString())
                             app?.setUsername(jsonObject.get("username").toString())
                             app?.setUserEmail(jsonObject.get("email").toString())
+                            app?.setIsLogin(true)
                             Log.i(
                                 TAG,
                                 "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}"
@@ -119,18 +129,22 @@ class MainActivity : AppCompatActivity() {
                                         val jsonObject = JSONObject(apiPackage)
                                         val mailboxes = jsonObject.getJSONArray("mailboxes")
                                         for (i in 0 until mailboxes.length()) {
-                                            app?.addMailbox(Mailbox(
-                                                mailboxes.getJSONObject(i).get("location").toString(),
-                                                mailboxes.getJSONObject(i).get("code").toString()
-                                            ))
+                                            app?.addMailbox(
+                                                Mailbox(
+                                                    mailboxes.getJSONObject(i).get("location")
+                                                        .toString(),
+                                                    mailboxes.getJSONObject(i).get("code")
+                                                        .toString()
+                                                )
+                                            )
                                             Log.i(
                                                 TAG,
                                                 mailboxes.getJSONObject(i).get("code").toString()
                                             )
                                         }
                                     }
-                                     val intent = Intent(this@MainActivity, MenuActivity::class.java)
-                                      startActivity(intent)
+                                    val intent = Intent(this@MainActivity, MenuActivity::class.java)
+                                    startActivity(intent)
                                 }
                             })
                         }
@@ -141,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun makeToast(message: String){
+    fun makeToast(message: String) {
         runOnUiThread {
             Toast.makeText(
                 this@MainActivity,
@@ -160,5 +174,9 @@ class MainActivity : AppCompatActivity() {
     fun loginWithUsernameAndPassword(view: View) {
         val i = Intent(this@MainActivity, LoginWithUsernameActivity::class.java)
         startActivityForResult(i, LoginWithUsernameActivity().ACTIVITY_ID)
+    }
+
+    fun exitApp(view: View) {
+        finishAffinity()
     }
 }

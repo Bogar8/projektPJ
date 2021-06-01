@@ -3,9 +3,7 @@
     android:viewportHeight="392.8"
     android:width="392.8dp"
     android:height="392.8dp">
-    <group
-        android:translateX="−0"
-        android:translateY="−0">
+    <group>
         <path
             android:pathData="M196.4 0L292 49.2 388 98 292 147.2 196.4 196.4 100.8 147.2 4.8 98 100.8 49.2Z"
             android:fillColor="#D9AC80" />

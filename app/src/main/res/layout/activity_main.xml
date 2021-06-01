@@ -7,10 +7,24 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btnLoginWithUsernameAndPassword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/btn_margin"
+        android:background="@drawable/button_style"
+        android:onClick="exitApp"
+        android:text="@string/exit"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoginWithUsernameAndPassword" />
+
+    <Button
         android:id="@+id/btnLoginWithCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/button_style"
         android:onClick="loginCamera"
         android:text="@string/login_with_camera"
         android:textSize="@dimen/text_size"
@@ -25,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20"
+        android:background="@drawable/button_style"
         android:onClick="loginWithUsernameAndPassword"
         android:text="@string/login"
         android:textSize="@dimen/text_size"

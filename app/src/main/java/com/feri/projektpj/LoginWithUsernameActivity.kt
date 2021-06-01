@@ -27,6 +27,15 @@ class LoginWithUsernameActivity : AppCompatActivity() {
         etUsername = findViewById(R.id.etPersonName)
         etPassword = findViewById(R.id.etPassword)
         app = application as ApplicationMy
+        if (app?.getLogin() == true)
+            finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = Intent(this@LoginWithUsernameActivity, MenuActivity::class.java)
+        if (app?.getLogin() == true)
+            startActivity(intent)
     }
 
     fun loginClick(view: View) {
@@ -55,9 +64,17 @@ class LoginWithUsernameActivity : AppCompatActivity() {
                             app?.setUserId(jsonObject.get("userId").toString())
                             app?.setUsername(jsonObject.get("username").toString())
                             app?.setUserEmail(jsonObject.get("email").toString())
-                            Log.i(TAG, "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}")
-                            val bodyMailboxes = FormBody.Builder().add("userId", app?.getUserId().toString()).build()
-                            val requestMailboxes: Request = Request.Builder().url("http://10.0.2.2:3000/mailbox/api/myMailboxes").post(bodyMailboxes).build()
+                            app?.setIsLogin(true)
+                            Log.i(
+                                TAG,
+                                "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}"
+                            )
+                            val bodyMailboxes =
+                                FormBody.Builder().add("userId", app?.getUserId().toString())
+                                    .build()
+                            val requestMailboxes: Request = Request.Builder()
+                                .url("http://10.0.2.2:3000/mailbox/api/myMailboxes")
+                                .post(bodyMailboxes).build()
                             client.newCall(requestMailboxes).enqueue(object : Callback {
                                 override fun onFailure(
                                     call: Call,
@@ -76,11 +93,24 @@ class LoginWithUsernameActivity : AppCompatActivity() {
                                         val mailboxes =
                                             jsonObject.getJSONArray("mailboxes")
                                         for (i in 0 until mailboxes.length()) {
-                                            app?.addMailbox(Mailbox(mailboxes.getJSONObject(i).get("location").toString(),mailboxes.getJSONObject(i).get("code").toString()))
-                                            Log.i(TAG, mailboxes.getJSONObject(i).get("code").toString())
+                                            app?.addMailbox(
+                                                Mailbox(
+                                                    mailboxes.getJSONObject(i).get("location")
+                                                        .toString(),
+                                                    mailboxes.getJSONObject(i).get("code")
+                                                        .toString()
+                                                )
+                                            )
+                                            Log.i(
+                                                TAG,
+                                                mailboxes.getJSONObject(i).get("code").toString()
+                                            )
                                         }
                                     }
-                                    val intent = Intent(this@LoginWithUsernameActivity, MenuActivity::class.java)
+                                    val intent = Intent(
+                                        this@LoginWithUsernameActivity,
+                                        MenuActivity::class.java
+                                    )
                                     startActivity(intent)
                                 }
                             })
@@ -88,12 +118,13 @@ class LoginWithUsernameActivity : AppCompatActivity() {
                         makeToast(jsonObject.getString("message"))
                     }
                 }
-        })
+            })
         } else {
             Toast.makeText(this, "Fill all boxes", Toast.LENGTH_LONG)
         }
     }
-    fun makeToast(message: String){
+
+    fun makeToast(message: String) {
         runOnUiThread {
             Toast.makeText(
                 this@LoginWithUsernameActivity,

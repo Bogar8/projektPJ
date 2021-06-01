@@ -23,4 +23,6 @@
     <string name="login">login</string>
     <string name="add_picture_for_login">Add picture for login</string>
     <string name="my_mailboxes">my mailboxes</string>
+    <string name="logout">Logout</string>
+    <string name="exit">exit</string>
 </resources>

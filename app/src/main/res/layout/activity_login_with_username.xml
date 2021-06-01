@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_25"
         android:onClick="loginClick"
+        android:background="@drawable/button_style"
         android:text="@string/login"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="parent"

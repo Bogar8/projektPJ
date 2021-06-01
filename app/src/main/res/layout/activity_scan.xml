@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_25"
         android:onClick="finishActivity"
+        android:background="@drawable/button_style"
         android:textSize="@dimen/margin_25"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"

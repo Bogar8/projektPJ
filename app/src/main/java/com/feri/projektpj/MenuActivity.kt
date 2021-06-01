@@ -239,4 +239,10 @@ class MenuActivity : AppCompatActivity() {
             ).show()
         }
     }
+
+    fun logoutClick(view: View) {
+        app?.logout()
+        val intent = Intent(this@MenuActivity, MainActivity::class.java)
+        startActivity(intent)
+    }
 }

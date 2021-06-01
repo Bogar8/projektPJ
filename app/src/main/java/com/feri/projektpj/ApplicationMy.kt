@@ -10,6 +10,7 @@ class ApplicationMy : Application() {
         private var username: String? = null
         private var userEmail: String? = null
         private var userMailboxes: ArrayList<Mailbox> = ArrayList()
+        private var isLogin: Boolean = false
     }
 
     fun getUserId(): String? {
@@ -40,20 +41,36 @@ class ApplicationMy : Application() {
         userMailboxes.add(mailbox)
     }
 
-    fun getMailboxes() : ArrayList<Mailbox>{
+    fun getMailboxes(): ArrayList<Mailbox> {
         return userMailboxes
     }
 
-    fun getMailboxAtPosition(position: Int):Mailbox{
+    fun getMailboxAtPosition(position: Int): Mailbox {
         return userMailboxes.get(position)
     }
 
-    fun getMailboxesCount(): Int{
+    fun getMailboxesCount(): Int {
         return userMailboxes.size
     }
 
     override fun onCreate() {
         super.onCreate()
+    }
+
+    fun setIsLogin(login: Boolean) {
+        isLogin = login
+    }
+
+    fun getLogin(): Boolean {
+        return isLogin
+    }
+
+    fun logout() {
+        userID = null
+        username = null
+        userEmail = null
+        userMailboxes = ArrayList()
+        isLogin = false
     }
 
 }
