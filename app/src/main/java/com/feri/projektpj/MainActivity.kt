@@ -134,18 +134,21 @@ class MainActivity : AppCompatActivity() {
                                 }
                             })
                         }
+                        makeToast(jsonObject.getString("message"))
                     }
                 }
             })
         }
     }
 
-    private fun makeToast(message: String) {
-        Toast.makeText(
-            baseContext,
-            message,
-            Toast.LENGTH_LONG
-        ).show()
+    fun makeToast(message: String){
+        runOnUiThread {
+            Toast.makeText(
+                this@MainActivity,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     fun loginCamera(view: View) {

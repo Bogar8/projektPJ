@@ -78,6 +78,7 @@ class MenuActivity : AppCompatActivity() {
                                         "${app?.getUserEmail()}  ${app?.getUsername()}  ${app?.getUserId()}"
                                     )
                                 }
+                                makeToast(jsonObject.getString("message"))
                             }
                         }
                     })
@@ -113,6 +114,7 @@ class MenuActivity : AppCompatActivity() {
                             apiPackage = it.body()?.string()
                             val jsonObject = JSONObject(apiPackage)
                             Log.i(TAG, jsonObject.get("message").toString())
+                            makeToast(jsonObject.getString("message"))
                         }
                     }
                 })
@@ -226,5 +228,15 @@ class MenuActivity : AppCompatActivity() {
     fun openMyMailboxes(view: View) {
         val intent = Intent(this@MenuActivity, MyMailboxesActivity::class.java)
         startActivityForResult(intent, MyMailboxesActivity().ACTIVITY_ID)
+    }
+
+    fun makeToast(message: String){
+        runOnUiThread {
+            Toast.makeText(
+                this@MenuActivity,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }

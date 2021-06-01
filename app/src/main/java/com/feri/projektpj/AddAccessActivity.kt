@@ -216,13 +216,19 @@ class AddAccessActivity : AppCompatActivity() {
                     if (jsonObject.getBoolean("successful")) {
                         Log.i(TAG, "Dostop dodan")
                     }
+                    makeToast(jsonObject.getString("message"))
                 }
             }
         })
-
+    }
+    fun makeToast(message: String){
+        runOnUiThread {
+            Toast.makeText(
+                this@AddAccessActivity,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }
 
-private fun Date.format(isoLocalDate: DateTimeFormatter?) {
-
-}

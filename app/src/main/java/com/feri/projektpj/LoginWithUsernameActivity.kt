@@ -85,11 +85,21 @@ class LoginWithUsernameActivity : AppCompatActivity() {
                                 }
                             })
                         }
+                        makeToast(jsonObject.getString("message"))
                     }
                 }
         })
         } else {
             Toast.makeText(this, "Fill all boxes", Toast.LENGTH_LONG)
+        }
+    }
+    fun makeToast(message: String){
+        runOnUiThread {
+            Toast.makeText(
+                this@LoginWithUsernameActivity,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }
