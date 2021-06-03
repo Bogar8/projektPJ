@@ -148,7 +148,11 @@ class MainActivity : AppCompatActivity() {
                                 }
                             })
                         }
-                        makeToast(jsonObject.getString("message"))
+
+                        if(!app?.getUsername().isNullOrEmpty())
+                            makeToast(jsonObject.getString("message") + "\nHello " + app?.getUsername())
+                        else
+                            makeToast(jsonObject.getString("message"))
                     }
                 }
             })
