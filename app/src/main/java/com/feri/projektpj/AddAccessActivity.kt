@@ -159,19 +159,19 @@ class AddAccessActivity : AppCompatActivity() {
                 etUsername?.setError(getString(R.string.empty))
                 return
             }
-            if (TextUtils.isEmpty(tvDateFrom?.getText())) {
+            if (tvDateFrom?.text.toString().equals(getString(R.string.date_from))) {
                 tvDateFrom?.setError(getString(R.string.empty))
                 return
             }
-            if (TextUtils.isEmpty(tvDateTo?.getText())) {
-                tvDateTo?.setError(getString(R.string.empty))
-                return
-            }
-            if (TextUtils.isEmpty(tvTimeFrom?.getText())) {
+            if (tvTimeFrom?.text.toString().equals(getString(R.string.time_from))) {
                 tvTimeFrom?.setError(getString(R.string.empty))
                 return
             }
-            if (TextUtils.isEmpty(tvTimeTo?.getText())) {
+            if (tvDateTo?.text.toString().equals(getString(R.string.date_to))) {
+                tvDateTo?.setError(getString(R.string.empty))
+                return
+            }
+            if (tvTimeTo?.text.toString().equals(getString(R.string.time_to))) {
                 tvTimeTo?.setError(getString(R.string.empty))
                 return
             }
