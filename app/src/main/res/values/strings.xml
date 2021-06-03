@@ -25,4 +25,6 @@
     <string name="my_mailboxes">my mailboxes</string>
     <string name="logout">Logout</string>
     <string name="exit">exit</string>
+    <string name="register">register</string>
+    <string name="email">Email</string>
 </resources>

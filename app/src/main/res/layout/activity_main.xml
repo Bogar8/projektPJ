@@ -7,13 +7,26 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btnLoginWithUsernameAndPassword3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
+        android:onClick="exitApp"
+        android:text="@string/exit"
+        android:layout_marginTop="@dimen/btn_margin"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoginWithUsernameAndPassword2" />
+
+    <Button
         android:id="@+id/btnLoginWithUsernameAndPassword2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/btn_margin"
         android:background="@drawable/button_style"
-        android:onClick="exitApp"
-        android:text="@string/exit"
+        android:onClick="register"
+        android:text="@string/register"
         android:textSize="@dimen/text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

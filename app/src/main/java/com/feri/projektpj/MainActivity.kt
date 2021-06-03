@@ -175,8 +175,15 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 
+    fun register(view: View) {
+        val intent = Intent(this@MainActivity,LoginWithUsernameActivity::class.java)
+        intent.putExtra("MODE","REGISTER")
+        startActivity(intent)
+    }
+
     fun loginWithUsernameAndPassword(view: View) {
         val i = Intent(this@MainActivity, LoginWithUsernameActivity::class.java)
+        i.putExtra("MODE","LOGIN")
         startActivityForResult(i, LoginWithUsernameActivity().ACTIVITY_ID)
     }
 

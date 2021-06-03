@@ -21,5 +21,11 @@
     <string name="password">Geslo</string>
     <string name="name">Ime</string>
     <string name="login_with_camera">prijava z kamero</string>
-    <string name="login">login</string>
+    <string name="login">Prijava</string>
+    <string name="add_picture_for_login">Dodaj sliko za prijavo</string>
+    <string name="my_mailboxes">Moji nabiralniki</string>
+    <string name="logout">Odjava</string>
+    <string name="exit">Izhod</string>
+    <string name="register">Registracija</string>
+    <string name="email">Email</string>
 </resources>
