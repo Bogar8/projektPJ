@@ -33,6 +33,12 @@ class MenuActivity : AppCompatActivity() {
         app = application as ApplicationMy
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (app?.getLogin() == false)
+            finish()
+    }
+
     fun addPictureClick(view: View) {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent, CAMERA_REQUEST)
@@ -230,7 +236,7 @@ class MenuActivity : AppCompatActivity() {
         startActivityForResult(intent, MyMailboxesActivity().ACTIVITY_ID)
     }
 
-    fun makeToast(message: String){
+    fun makeToast(message: String) {
         runOnUiThread {
             Toast.makeText(
                 this@MenuActivity,
