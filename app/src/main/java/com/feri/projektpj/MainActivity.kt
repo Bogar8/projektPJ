@@ -32,11 +32,13 @@ class MainActivity : AppCompatActivity() {
     val MY_INTERNET_PERMISSION_REQUEST = 112
     private var apiPackage: String? = ""
     private var app: ApplicationMy? = null
+    private val MY_CAMERA_PERMISSION_REQUEST = 1002
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkPermission()
+        checkPermissionCamera()
         app = application as ApplicationMy
         if (app?.getLogin() == true)
             finish()
@@ -72,10 +74,17 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == MY_INTERNET_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this, getString(R.string.internet_access_granted), Toast.LENGTH_LONG)
                 .show()
-        else
+        else if(requestCode == MY_INTERNET_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED)
             Toast.makeText(this, getString(R.string.internet_access_error), Toast.LENGTH_LONG)
                 .show()
+
+        else if (requestCode == MY_CAMERA_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            Toast.makeText(this, getString(R.string.camera_access_granted), Toast.LENGTH_LONG)
+                .show()
+        else if (requestCode == MY_CAMERA_PERMISSION_REQUEST && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED)
+           finish()
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -149,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                             })
                         }
 
-                        if(!app?.getUsername().isNullOrEmpty())
+                        if (!app?.getUsername().isNullOrEmpty())
                             makeToast(jsonObject.getString("message") + "\nHello " + app?.getUsername())
                         else
                             makeToast(jsonObject.getString("message"))
@@ -176,18 +185,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun register(view: View) {
-        val intent = Intent(this@MainActivity,LoginWithUsernameActivity::class.java)
-        intent.putExtra("MODE","REGISTER")
+        val intent = Intent(this@MainActivity, LoginWithUsernameActivity::class.java)
+        intent.putExtra("MODE", "REGISTER")
         startActivity(intent)
     }
 
     fun loginWithUsernameAndPassword(view: View) {
         val i = Intent(this@MainActivity, LoginWithUsernameActivity::class.java)
-        i.putExtra("MODE","LOGIN")
+        i.putExtra("MODE", "LOGIN")
         startActivityForResult(i, LoginWithUsernameActivity().ACTIVITY_ID)
     }
 
     fun exitApp(view: View) {
         finishAffinity()
+    }
+
+    private fun checkPermissionCamera() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                MY_CAMERA_PERMISSION_REQUEST
+            )
+        }
     }
 }
